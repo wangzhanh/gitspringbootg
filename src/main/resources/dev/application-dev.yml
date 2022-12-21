@@ -1,0 +1,82 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    name: datasource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      url: jdbc:mysql://192.168.173.10:3306/test?allowMultiQueries=true&characterEncoding=utf8
+      username: root
+      password: root
+
+      #初始连接数
+      initial-size: 10
+      #最小连接数
+      min-idle: 10
+      #最大连接数
+      max-active: 60
+      #连接最大等待时间
+      max-wait: 60000
+      #
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      #配置StatViewServlet监控页面
+      stat-view-servlet:
+            #开启
+            enabled: true
+            #访问监控路径的地址
+            url-pattern: /druid/*
+            #不允许清空，重新统计
+            reset-enable: false
+            #登录用户名
+            login-username: admin
+            #登录密码
+            login-password: admin
+            #允许访问地址
+            allow: 127.0.0.1
+      ########## 配置WebStatFilter，用于采集web关联监控的数据 #########
+      web-stat-filter:
+        #启动statFilter
+        enabled: true
+        #排除的url
+        exclusions: /druid/*,*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico
+        #开启session统计
+        session-stat-enable: true
+        #session的最大个数，默认为100
+        session-stat-max-count: 1000
+        #过滤的url
+        url-pattern: /*
+      filter:
+           stat:
+             #开启慢sql统计
+             log-slow-sql: true
+             #慢sql的时间
+             slow-sql-millis: 2000
+             merge-sql: true
+             #开启druid datasource监控
+             enabled: true
+           wall:
+             config:
+             multi-statement-allow: true
+
+  thymeleaf:
+    cache: false
+    mode: HTML5
+    encoding: UTF-8
+
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.example.test.entity
+  #打印sql
+  #configuration:
+    #log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
